@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>form</title>
+	<style type="text/css">
+		.main{ margin: auto; width: 800px; margin-top: 40px; }
+		.form-data{ display:  block; position:  relative; margin-top: 10px; }
+		.form-data label{ font: 14px/16px arial; color: #000; display:  block; margin-bottom: 10px;}
+		.form-data input{ border: 1px solid #ccc; border-radius: 5px; color: #000; width: 100%; padding: 10px; margin-bottom: 10px;}
+		.showpassword{ margin-bottom: 10px; background: #ccc; border-radius: 5px; padding: 5px 10px; color: #000; font: 14px/30px arial; cursor:  pointer;}
+		.error{ color: #c00; font: 16px/20px arial; padding: 5px 0; display:  none; position:  absolute;top:-35px; left:0;  }
+
+	</style>
+
+</head>
+<body>
+<div class="main">
+	<form id="myForm" method="post" action="form.php">
+		<div class="form-data">
+			<label>First Name</label>
+			<input type="text" name="firstname" placeholder="Firstname" id="firstname" /> 
+			<span class="error"></span>
+		</div>
+		<div class="form-data">
+			<label>Last Name</label>
+			<input type="text" name="lastname" placeholder="lastname" id="lastname" /> 
+			
+		</div>
+		<div class="form-data">
+			<label>Password</label>
+			<input type="password" name="password" placeholder="Password" id="Password" />  
+		</div>
+		<div class="form-data">
+			<small class="showpassword">Show password</small>
+		</div>
+		<div class="form-data">
+			<label>Email</label>
+			<input type="text" name="email" placeholder="Email Id" />
+		</div>   
+		<input type="submit" value="submit" class="submit" />   
+	</form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+	$(".showpassword").click(function(){
+		var passwordShow = $("#Password")
+		var attrPassord = passwordShow.attr('type')
+		 //console.log(attrPassord)
+		 if(attrPassord == 'password'){
+		 	passwordShow.attr('type','text')
+		 	$(this).text("Hide Password")
+		 }else{
+		 	passwordShow.attr('type','password')
+		 	$(this).text("Show Password")
+		 }
+	})
+
+	$("#firstname,#lastname").keyup(function(){
+		$("span.error").hide()
+		
+	});
+
+	$("form#myForm").on('submit',function(){
+
+		var nametxt = $("#firstname").val();
+		var lastnametxt = $("#lastname").val();
+		var passwordtxt =$("#password").val();
+
+		if(nametxt == ""){
+			$("#firstname").next($("span").text("please enter your First name"));
+			$("span.error").show()
+		}else if(lastnametxt == ""){
+			$("#lastname").next($("span").text("please enter your Last name"));
+			$("span.error").show()
+		}else if(passwordtxt == ""){
+			$("#Password").next($("span").text("please enter your password"));
+			$("span.error").show()
+		}
+		
+
+		
+
+
+		var that = $(this), 
+		 	url = that.attr("action"),
+		 	type = that.attr("method"),
+			data = {};
+		that.find("[name]").each(function(value,index){
+			var that = $(this),
+				name = that.attr("name"),  
+			 	value = that.val();
+				//console.log(value);
+			data[name] = value;
+			//console.log(data);
+		})
+		
+		$.ajax({
+			url: url,
+			type: type,
+			data: data,
+			success:function(resp){
+				//console.log(resp)
+			}
+		})  
+
+		return false;
+	})
+
+</script>
+
+
+
+</body>
+</html>
